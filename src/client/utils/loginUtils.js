@@ -45,10 +45,10 @@ export function verifyUserName(userName) {
 }
 
 /**
- * Verifies whether an Organization field is allowed (check in Register page)
- * @param {string} orgField - orgField to be checked
+ * Verifies whether a Major field is allowed (check in Register page)
+ * @param {string} majorField - majorField to be checked
  * @return {boolean} - T/F valid orgField
  */
-export function verifyOrganizationField(orgField) {
-    return typeof orgField === 'string' && orgField.length >= 1;
+export function verifyMajor(majorField) {
+    return typeof majorField === 'string' && majorField.length >= 1;
 }

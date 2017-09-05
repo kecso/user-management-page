@@ -16,11 +16,11 @@ export default class AccountRequested extends Component {
     render() {
         return <div className="register-box-body" style={STYLE.fieldBox}>
             <p className="login-box-msg">
-                An account has been requested
+                An account has been provided
             </p>
             <div className="account-requested-text">
-                A request has been send to a site-admin. Monitor your email address provided for additional instructions
-                once the request has been accepted.
+                Your request has been processed and your account should be available as of now.
+                Please go back to the main page and try to log in.
             </div>
         </div>;
     }

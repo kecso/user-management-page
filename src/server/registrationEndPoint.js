@@ -8,8 +8,7 @@
 module.exports = function getRegistrationEndPoint(middlewareOpts) {
     var gmeConfig = middlewareOpts.gmeConfig,
         gmeAuth = middlewareOpts.gmeAuth,
-        logger = middlewareOpts.logger.fork('GSN-Registration');
-
+        logger = middlewareOpts.logger.fork('MIC-Registration');
 
     return function (req, res, next) {
         var receivedData = req.body,
@@ -24,14 +23,12 @@ module.exports = function getRegistrationEndPoint(middlewareOpts) {
 
         logger.info('New user requested:', logData);
 
-        // TODO: Add regex for userId and check other data too.
-        if (typeof receivedData.userId !== 'string' || receivedData.userId.length < 3 || /^[A-Za-z0-9_]+$/.test(receivedData.userId) === false ||
+        if (typeof receivedData.userId !== 'string' || receivedData.userId.length < 3 ||
             typeof receivedData.email !== 'string' || receivedData.email.length === 0 ||
             typeof receivedData.info !== 'object' || receivedData.info === null ||
             typeof receivedData.info.userName !== 'string' || receivedData.info.userName.length === 0 ||
-            typeof receivedData.info.orgName !== 'string' || receivedData.info.orgName.length === 0 ||
-            typeof receivedData.info.orgAddr !== 'string' || receivedData.info.orgAddr.length === 0 ||
-            typeof receivedData.info.orgCountry !== 'string' || receivedData.info.userName.orgCountry === 0) {
+            receivedData.info.userName.indexOf(' ') === -1 ||
+            typeof receivedData.info.major !== 'string' || receivedData.info.major.length === 0) {
 
             logger.warn('Provided data was invalid!');
             res.sendStatus(400);
@@ -44,13 +41,12 @@ module.exports = function getRegistrationEndPoint(middlewareOpts) {
                     throw new Error('Email [' + receivedData.email + '] is already registered!');
                 }
 
+                console.log('registering user');
                 return gmeAuth.addUser(receivedData.userId, receivedData.email, receivedData.password, true, {
-                    disabled: true,
+                    disabled: false,
                     data: {
                         userName: receivedData.info.userName,
-                        orgName: receivedData.info.orgName,
-                        orgAddr: receivedData.info.orgAddr,
-                        orgCountry: receivedData.info.orgCountry
+                        major: receivedData.info.major
                     }
                 });
             })
